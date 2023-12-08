@@ -14,7 +14,7 @@ export interface CsrfOption {
   cookieOptions: CookieOptions;
 }
 
-export interface WithCsrf extends Record<string, unknown>{
+export interface WithCsrf extends Record<string, unknown> {
   csrf: {
     csrfVerifyFunction: { (token: string | null): boolean };
     getCookieStr: { (): Promise<string> };

@@ -1,4 +1,4 @@
-import { CsrfOption } from "fresh_csrf/src/type.ts";
+import { CsrfOption } from "./type.ts";
 
 export const MSEC = 1000;
 export const DEFAULT_KEY = "01234567012345670123456701234567";
