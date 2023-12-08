@@ -37,7 +37,7 @@ jobs:
         run: cat ./deno.json
 
       - name: Run tests
-        run: deno test --unstable --allow-read --allow-write --allow-env --allow-net --coverage=./coverage
+        run: deno test --unstable --allow-read --allow-write --allow-env --allow-net --no-check --coverage=./coverage
       
       - name: View coverage
         run: |

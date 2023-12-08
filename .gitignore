@@ -1,2 +1,4 @@
 deno.json
 tests/work/
+node_modules/
+
