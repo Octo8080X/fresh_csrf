@@ -1,5 +1,4 @@
 import { FreshContext, Handlers, PageProps } from "$fresh/server.ts";
-import { useSignal } from "@preact/signals";
 import type { WithCsrf } from "../../mod.ts";
 
 export const handler: Handlers<unknown, WithCsrf> = {
@@ -37,7 +36,6 @@ export const handler: Handlers<unknown, WithCsrf> = {
 export default function Test(
   props: PageProps<{ text: string }, WithCsrf>,
 ) {
-  const count = useSignal(3);
   return (
     <div>
       <p>{props?.data?.text || "NO SET"}</p>
