@@ -27,6 +27,7 @@ export default defineConfig({
 ## Using the functionality provided by the plugin
 
 Methods are provided.
+
 - `csrfVerifyFunction()`
 - `updateKeyPair()`
 - `getTokenStr()`
