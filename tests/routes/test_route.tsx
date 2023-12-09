@@ -1,8 +1,6 @@
 import { FreshContext, Handlers, PageProps } from "$fresh/server.ts";
 import { useSignal } from "@preact/signals";
 import type { WithCsrf } from "../../mod.ts";
-import { resetPropWarnings } from "preact/debug";
-import { getCookies } from "https://deno.land/std@0.207.0/http/cookie.ts";
 
 export const handler: Handlers<unknown, WithCsrf> = {
   async GET(_req: Request, ctx: FreshContext) {

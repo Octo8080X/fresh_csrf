@@ -3,3 +3,4 @@ export {
   assertEquals,
   assertNotMatch,
 } from "https://deno.land/std@0.208.0/testing/asserts.ts";
+export { FakeTime } from "https://deno.land/std@0.208.0/testing/time.ts";

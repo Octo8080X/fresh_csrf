@@ -1,7 +1,7 @@
 import { createHandler, ServeHandlerInfo } from "$fresh/server.ts";
 import manifest from "./work/fresh.gen.ts";
 import config from "./config/csrf_fresh.config.ts";
-import { assert, assertEquals, assertNotMatch } from "./test_deps.ts";
+import { assert, assertEquals, assertNotMatch, FakeTime } from "./test_deps.ts";
 
 const CONN_INFO: ServeHandlerInfo = {
   remoteAddr: { hostname: "127.0.0.1", port: 53496, transport: "tcp" },
@@ -167,6 +167,41 @@ Deno.test("Csrf Test", async (t) => {
 
     const headers = new Headers();
     headers.set("cookie", `csrf_token=${csrfCookieToken}`);
+
+    res = await handler(
+      new Request("http://127.0.0.1/csrf", {
+        headers,
+        method: "POST",
+        body: formData,
+      }),
+      CONN_INFO,
+    );
+
+    assertEquals(res.status, 302);
+    assertEquals(res.headers.get("location"), "/csrf");
+  });
+
+  await t.step("Verification Tokens Failed(Token Time Out)", async () => {
+    let res = await handler(new Request("http://127.0.0.1/csrf"), CONN_INFO);
+    const time = new FakeTime();
+
+    const text = await res.text();
+    const csrfCookieToken = res.headers
+      .get("set-cookie")!
+      .split("csrf_token=")[1]
+      .split(";")[0];
+    const csrfToken = text
+      .split('<input type="hidden" name="csrf" value="')[1]
+      .split('"/')[0];
+
+    const formData = new FormData();
+    formData.append("csrf", csrfToken);
+    formData.append("text", "XXX");
+
+    const headers = new Headers();
+    headers.set("cookie", `csrf_token=${csrfCookieToken}`);
+
+    time.tick(60 * 6 * 1000);
 
     res = await handler(
       new Request("http://127.0.0.1/csrf", {
