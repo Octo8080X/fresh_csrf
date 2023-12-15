@@ -1,7 +1,7 @@
 import { createHandler, ServeHandlerInfo } from "$fresh/server.ts";
 import manifest from "./work/fresh.gen.ts";
 import config from "./config/csrf_fresh.config.ts";
-import { assert, assertEquals, assertNotMatch, FakeTime } from "./test_deps.ts";
+import { expect, FakeTime } from "./test_deps.ts";
 
 const CONN_INFO: ServeHandlerInfo = {
   remoteAddr: { hostname: "127.0.0.1", port: 53496, transport: "tcp" },
@@ -12,10 +12,10 @@ Deno.test("Csrf Test", async (t) => {
 
   await t.step("Get Tokens", async () => {
     const res = await handler(new Request("http://127.0.0.1/csrf"), CONN_INFO);
-    assertEquals(res.status, 200);
+    expect(res.status).toBe(200);
 
     const text = await res.text();
-    assertEquals(text.includes("<p>NO SET</p>"), true);
+    expect(text.includes("<p>NO SET</p>")).toBeTruthy();
 
     const csrfCookieToken = res.headers
       .get("set-cookie")!
@@ -25,10 +25,8 @@ Deno.test("Csrf Test", async (t) => {
       .split('<input type="hidden" name="csrf" value="')[1]
       .split('"/')[0];
 
-    assert(csrfCookieToken);
-    assert(csrfToken);
-    assertNotMatch(csrfCookieToken, /^$/);
-    assertNotMatch(csrfToken, /^$/);
+    expect(csrfCookieToken).toMatch(/^$/);
+    expect(csrfToken).toMatch(/^$/);
   });
 
   await t.step("Verification Tokens Success", async () => {
@@ -59,8 +57,8 @@ Deno.test("Csrf Test", async (t) => {
       CONN_INFO,
     );
 
-    assertEquals(res.status, 200);
-    assertEquals((await res.text()).includes("<p>XXX</p>"), true);
+    expect(res.status).toBe(200);
+    expect((await res.text()).includes("<p>XXX</p>")).toBeTruthy();
   });
 
   await t.step("Verification Tokens Failed(Illegal Cookie Token)", async () => {
@@ -91,8 +89,8 @@ Deno.test("Csrf Test", async (t) => {
       CONN_INFO,
     );
 
-    assertEquals(res.status, 302);
-    assertEquals(res.headers.get("location"), "/csrf");
+    expect(res.status).toBe(302);
+    expect(res.headers.get("location")).toBe("/csrf");
   });
 
   await t.step("Verification Tokens Failed(Illegal Token)", async () => {
@@ -123,8 +121,8 @@ Deno.test("Csrf Test", async (t) => {
       CONN_INFO,
     );
 
-    assertEquals(res.status, 302);
-    assertEquals(res.headers.get("location"), "/csrf");
+    expect(res.status).toBe(302);
+    expect(res.headers.get("location")).toBe("/csrf");
   });
 
   await t.step("Verification Tokens Failed(Not set Cookie token)", async () => {
@@ -150,8 +148,8 @@ Deno.test("Csrf Test", async (t) => {
       CONN_INFO,
     );
 
-    assertEquals(res.status, 302);
-    assertEquals(res.headers.get("location"), "/csrf");
+    expect(res.status).toBe(302);
+    expect(res.headers.get("location")).toBe("/csrf");
   });
 
   await t.step("Verification Tokens Failed(Not set Token)", async () => {
@@ -177,8 +175,8 @@ Deno.test("Csrf Test", async (t) => {
       CONN_INFO,
     );
 
-    assertEquals(res.status, 302);
-    assertEquals(res.headers.get("location"), "/csrf");
+    expect(res.status).toBe(302);
+    expect(res.headers.get("location")).toBe("/csrf");
   });
 
   await t.step("Verification Tokens Failed(Token Time Out)", async () => {
@@ -212,7 +210,7 @@ Deno.test("Csrf Test", async (t) => {
       CONN_INFO,
     );
 
-    assertEquals(res.status, 302);
-    assertEquals(res.headers.get("location"), "/csrf");
+    expect(res.status).toBe(302);
+    expect(res.headers.get("location")).toBe("/csrf");
   });
 });
