@@ -25,8 +25,8 @@ Deno.test("Csrf Test", async (t) => {
       .split('<input type="hidden" name="csrf" value="')[1]
       .split('"/')[0];
 
-    expect(csrfCookieToken).toMatch(/^$/);
-    expect(csrfToken).toMatch(/^$/);
+    expect(csrfCookieToken).not.toMatch(/^$/);
+    expect(csrfToken).not.toMatch(/^$/);
   });
 
   await t.step("Verification Tokens Success", async () => {
