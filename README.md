@@ -15,9 +15,9 @@ import { testPlugin } from "../plugins/test_plugin.ts";
 export default defineConfig({
   plugins: [
     await getCsrfPlugin(await Deno.openKv(":memory:"), {
-      encryptKey: "12345678901234567890123456789012", // <= string length of 32
-      key: "01234567012345670123456701234567", // <= string length of 32
-      salt: 123,
+      encryptKey: Deno.env.get("FRESH_CSRF_ENCRYPT_KEY")!, // <= string length of 32, ex. 12345678901234567890123456789012
+      key: Deno.env.get("FRESH_CSRF_KEY")!, // <= string length of 32, ex. 01234567012345670123456701234567
+      salt: Number(Deno.env.get("FRESH_CSRF_SALT!")!), // ex. 123
     }),
     testPlugin,
   ],
