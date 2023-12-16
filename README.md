@@ -9,8 +9,7 @@ Dead simple csrf for [Deno Csrf](https://deno.land/x/deno_csrf).
 ```ts
 /// <reference lib="deno.unstable" />
 import { defineConfig } from "$fresh/server.ts";
-import { getCsrfPlugin } from "../../mod.ts";
-import { testPlugin } from "../plugins/test_plugin.ts";
+import { getCsrfPlugin } from "https://deno.land/x/fresh_csrf/mod.ts";
 
 export default defineConfig({
   plugins: [
@@ -19,7 +18,6 @@ export default defineConfig({
       key: Deno.env.get("FRESH_CSRF_KEY")!, // <= string length of 32, ex. 01234567012345670123456701234567
       salt: Number(Deno.env.get("FRESH_CSRF_SALT!")!), // ex. 123
     }),
-    testPlugin,
   ],
 });
 ```
@@ -37,7 +35,7 @@ Methods are provided.
 ```ts
 import { FreshContext, Handlers, PageProps } from "$fresh/server.ts";
 import { useSignal } from "@preact/signals";
-import type { WithCsrf } from "../../mod.ts";
+import type { WithCsrf } from "https://deno.land/x/fresh_csrf/mod.ts";
 
 export const handler: Handlers<unknown, WithCsrf> = {
   async GET(_req: Request, ctx: FreshContext) {
