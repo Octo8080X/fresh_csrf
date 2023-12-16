@@ -24,6 +24,8 @@ export default defineConfig({
 });
 ```
 
+⚠ Recommend managing each key and salt using environment variables.
+
 ## Using the functionality provided by the plugin
 
 Methods are provided.
