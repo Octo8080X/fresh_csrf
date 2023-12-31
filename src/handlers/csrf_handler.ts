@@ -150,7 +150,7 @@ export function getHandler(kv: Deno.Kv, options: Partial<CsrfOption> = {}) {
 
     setCookie(res.headers, {
       value: await getCookieStr(),
-      name: mergedOptions.cookieOptions.name,
+      ...mergedOptions.cookieOptions,
     });
 
     return res;

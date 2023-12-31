@@ -10,5 +10,10 @@ export const testPlugin: Plugin = {
       component: TestComponent as ComponentType<PageProps>,
       path: "/csrf",
     },
+    {
+      handler,
+      component: TestComponent as ComponentType<PageProps>,
+      path: "/sub/csrf",
+    },
   ],
 };

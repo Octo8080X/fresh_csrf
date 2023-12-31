@@ -8,9 +8,8 @@ const CONN_INFO: ServeHandlerInfo = {
 };
 
 Deno.test("Csrf Test", async (t) => {
-  const handler = await createHandler(manifest, config);
-
   await t.step("Get Tokens", async () => {
+    const handler = await createHandler(manifest, config);
     const res = await handler(new Request("http://127.0.0.1/csrf"), CONN_INFO);
     expect(res.status).toBe(200);
 
@@ -29,7 +28,25 @@ Deno.test("Csrf Test", async (t) => {
     expect(csrfToken).not.toMatch(/^$/);
   });
 
+  await t.step("Get Tokens sub path", async () => {
+    const handler = await createHandler(manifest, config);
+    const res = await handler(new Request("http://127.0.0.1/sub/csrf"), CONN_INFO);
+    expect(res.status).toBe(200);
+
+    const text = await res.text();
+    expect(text.includes("<p>NO SET</p>")).toBeTruthy();
+
+
+    console.log(res.headers.get("set-cookie"));
+    const csrfCookieToken = res.headers
+      .get("set-cookie")!
+      .split("Path=")[1]
+
+    expect(csrfCookieToken).toBe("/");
+  });
+
   await t.step("Verification Tokens Success", async () => {
+    const handler = await createHandler(manifest, config);
     let res = await handler(new Request("http://127.0.0.1/csrf"), CONN_INFO);
 
     const text = await res.text();
@@ -62,6 +79,7 @@ Deno.test("Csrf Test", async (t) => {
   });
 
   await t.step("Verification Tokens Failed(Illegal Cookie Token)", async () => {
+    const handler = await createHandler(manifest, config);
     let res = await handler(new Request("http://127.0.0.1/csrf"), CONN_INFO);
 
     const text = await res.text();
@@ -94,6 +112,7 @@ Deno.test("Csrf Test", async (t) => {
   });
 
   await t.step("Verification Tokens Failed(Illegal Token)", async () => {
+    const handler = await createHandler(manifest, config);
     let res = await handler(new Request("http://127.0.0.1/csrf"), CONN_INFO);
 
     const text = await res.text();
@@ -126,6 +145,7 @@ Deno.test("Csrf Test", async (t) => {
   });
 
   await t.step("Verification Tokens Failed(Not set Cookie token)", async () => {
+    const handler = await createHandler(manifest, config);
     let res = await handler(new Request("http://127.0.0.1/csrf"), CONN_INFO);
 
     const text = await res.text();
@@ -153,6 +173,7 @@ Deno.test("Csrf Test", async (t) => {
   });
 
   await t.step("Verification Tokens Failed(Not set Token)", async () => {
+    const handler = await createHandler(manifest, config);
     let res = await handler(new Request("http://127.0.0.1/csrf"), CONN_INFO);
 
     const csrfCookieToken = res.headers
@@ -180,6 +201,7 @@ Deno.test("Csrf Test", async (t) => {
   });
 
   await t.step("Verification Tokens Failed(Token Time Out)", async () => {
+    const handler = await createHandler(manifest, config);
     let res = await handler(new Request("http://127.0.0.1/csrf"), CONN_INFO);
     const time = new FakeTime();
 
