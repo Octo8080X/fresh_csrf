@@ -28,7 +28,7 @@ Deno.test("Csrf Test", async (t) => {
     expect(csrfToken).not.toMatch(/^$/);
   });
 
-  await t.step("Get Tokens sub path", async () => {
+  await t.step("Get Tokens cookie path is / on sub path", async () => {
     const handler = await createHandler(manifest, config);
     const res = await handler(new Request("http://127.0.0.1/sub/csrf"), CONN_INFO);
     expect(res.status).toBe(200);
