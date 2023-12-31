@@ -30,17 +30,19 @@ Deno.test("Csrf Test", async (t) => {
 
   await t.step("Get Tokens cookie path is / on sub path", async () => {
     const handler = await createHandler(manifest, config);
-    const res = await handler(new Request("http://127.0.0.1/sub/csrf"), CONN_INFO);
+    const res = await handler(
+      new Request("http://127.0.0.1/sub/csrf"),
+      CONN_INFO,
+    );
     expect(res.status).toBe(200);
 
     const text = await res.text();
     expect(text.includes("<p>NO SET</p>")).toBeTruthy();
 
-
     console.log(res.headers.get("set-cookie"));
     const csrfCookieToken = res.headers
       .get("set-cookie")!
-      .split("Path=")[1]
+      .split("Path=")[1];
 
     expect(csrfCookieToken).toBe("/");
   });
